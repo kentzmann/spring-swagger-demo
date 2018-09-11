@@ -1,6 +1,6 @@
-package com.example.demo.controllers;
+package com.advertiser.demo.controllers;
 
-import com.example.demo.models.AdvertiserModel;
+import com.advertiser.demo.models.AdvertiserModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;

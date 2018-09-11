@@ -1,4 +1,4 @@
-package com.example.demo.models;
+package com.advertiser.demo.models;
 
 import org.springframework.stereotype.Component;
 
