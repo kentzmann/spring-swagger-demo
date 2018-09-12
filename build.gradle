@@ -30,6 +30,7 @@ dependencies {
 	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
 	testCompile('org.springframework.boot:spring-boot-starter-test')
 	testCompile 'junit:junit:4.12'
+	testCompile group: 'com.h2database', name: 'h2', version: '1.3.148'
 }
 
 //mainClassName = 'com.boraji.tutorial.MainApp'

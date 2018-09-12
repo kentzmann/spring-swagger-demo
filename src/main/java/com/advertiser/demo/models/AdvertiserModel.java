@@ -3,6 +3,7 @@ package com.advertiser.demo.models;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * This is the base object response
@@ -11,34 +12,13 @@ import java.io.Serializable;
 public class AdvertiserModel implements Serializable {
 	private static final long serialVersionUID = 371023409122355394L;
 
-	private String advertiserName;
-	private String contactName;
-	private String creditLimit;
+	private List<Advertiser> advertisers;
 
-	public String getAdvertiserName() {
-		return advertiserName;
+	public List<Advertiser> getAdvertisers() {
+		return advertisers;
 	}
 
-	public void setAdvertiserName(String advertiserName) {
-		this.advertiserName = advertiserName;
+	public void setAdvertisers(List<Advertiser> advertisers) {
+		this.advertisers = advertisers;
 	}
-
-	public String getContactName() {
-		return contactName;
-	}
-
-	public void setContactName(String contactName) {
-		this.contactName = contactName;
-	}
-
-	public String getCreditLimit() {
-		return creditLimit;
-	}
-
-	public void setCreditLimit(String creditLimit) {
-		this.creditLimit = creditLimit;
-	}
-
-
-
 }
