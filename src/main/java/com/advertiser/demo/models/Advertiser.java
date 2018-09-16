@@ -6,32 +6,32 @@ import java.io.Serializable;
 public class Advertiser implements Serializable {
 	private static final long serialVersionUID = -1750922845778082911L;
 
-	private String advertiserName;
-	private String contactName;
-	private String creditLimit;
+	private String name;
+	private String contact;
+	private String credit;
 
-	public String getAdvertiserName() {
-		return advertiserName;
+	public String getName() {
+		return name;
 	}
 
-	public void setAdvertiserName(String advertiserName) {
-		this.advertiserName = advertiserName;
+	public void setName(String name) {
+		this.name = name;
 	}
 
-	public String getContactName() {
-		return contactName;
+	public String getContact() {
+		return contact;
 	}
 
-	public void setContactName(String contactName) {
-		this.contactName = contactName;
+	public void setContact(String contact) {
+		this.contact = contact;
 	}
 
 	public String getCreditLimit() {
-		return creditLimit;
+		return credit;
 	}
 
-	public void setCreditLimit(String creditLimit) {
-		this.creditLimit = creditLimit;
+	public void setCredit(String credit) {
+		this.credit = credit;
 	}
 
 	//TODO

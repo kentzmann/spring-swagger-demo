@@ -16,21 +16,21 @@ public class AdvertiserUtil {
 	public static List<Advertiser> buildAdvertiserDemoData() {
 		List<Advertiser> advertisers = new LinkedList<>();
 		Advertiser advertiser1 = new Advertiser();
-		advertiser1.setAdvertiserName("HEB");
-		advertiser1.setContactName("Mike Georgoff");
-		advertiser1.setCreditLimit("300000");
+		advertiser1.setName("HEB");
+		advertiser1.setContact("Mike Georgoff");
+		advertiser1.setCredit("300000");
 		advertisers.add(advertiser1);
 
 		Advertiser advertiser2 = new Advertiser();
-		advertiser2.setAdvertiserName("CircuitOfAmericas");
-		advertiser2.setContactName("Brian Mishkin");
-		advertiser2.setCreditLimit("500000");
+		advertiser2.setName("CircuitOfAmericas");
+		advertiser2.setContact("Brian Mishkin");
+		advertiser2.setCredit("500000");
 		advertisers.add(advertiser2);
 
 		Advertiser advertiser3 = new Advertiser();
-		advertiser3.setAdvertiserName("Chevrolet");
-		advertiser3.setContactName("Tom Bolton");
-		advertiser3.setCreditLimit("5000000");
+		advertiser3.setName("Chevrolet");
+		advertiser3.setContact("Tom Bolton");
+		advertiser3.setCredit("5000000");
 		advertisers.add(advertiser3);
 
 		return advertisers;

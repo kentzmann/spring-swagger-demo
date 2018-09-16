@@ -17,6 +17,17 @@ If facing Gradle issues on MAC:
         source .bash_profile
     d. Re-import the project in IntelliJ and point to the manually installed Gradle path during set-up
 
+DATABASE:
+1. Open this URL
+http://localhost:8080/h2-console
+2. For the JDBC URL use
+jdbc:h2:mem:testdb
+3. Click Connect
+4. Click ADVERTISERS and click Run
+5. Notice that the values that are already loaded in memory are because of these files located in /resources
+schema.sql, data.sql
+
+
 TO CREATE A NEW REPO:
 1. In root folder, initialize repo with this command:
 git init
