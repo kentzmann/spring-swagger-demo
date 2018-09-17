@@ -14,11 +14,11 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller for Advertiser to perform with:
- * 		GET, POST, PUT, DELETE advertiser name
+ * 		GET, POST, PUT, DELETE name name
  * Advertiser Resources:
  * 		Name, Contact, Credit
  * Validate if Advertiser has enough credit with:
- * 		GET advertiser name & credit
+ * 		GET name name & credit
  * Note: @EnableWebMvc causes Swagger to not load
  */
 @RestController
@@ -35,26 +35,13 @@ public class AdvertiserController {
 
 	/**
 	 * Find Advertiser in database
-	 * @param advertiser Name
+	 * @param name Name
 	 * @return Advertiser object by Name
 	 */
-	@GetMapping(value = "/{advertiser}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public final ResponseEntity<Advertiser> getAdvertiser(@PathVariable(name = "advertiser") String advertiser) {
-		Advertiser advertiserResponse = advertiserRepository.findByName(advertiser);
-		LOGGER.info("GET ADVERTISER BY NAME: " + advertiserResponse.toString());
+	@GetMapping(value = "/{name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public final ResponseEntity<Advertiser> getAdvertiser(@PathVariable(name = "name") String name) {
+		Advertiser advertiserResponse = advertiserRepository.findByName(name);
 		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
-	}
-
-	/**
-	 * Add a new Advertiser in database
-	 * @param advertiser Name
-	 * @return status
-	 */
-	@PostMapping(value = "/{advertiser}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public String newAdvertiser(@PathVariable(name = "advertiser") String advertiser) {
-		LOGGER.info("POST ADVERTISER BY NAME: " + advertiser);
-
-		return advertiser;
 	}
 
 	/**
@@ -68,9 +55,24 @@ public class AdvertiserController {
 		return advertiserModel;
 	}
 
+	/**
+	 * Add a new Advertiser in database
+	 * @param name Name
+	 * @return status
+	 */
+	@PostMapping(value = "/{name}/{contact}/{credit}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Advertiser> newAdvertiser(@PathVariable(name = "name") String name,
+								@PathVariable(name = "contact") String contact,
+								@PathVariable(name = "credit") String credit) {
+		Advertiser advertiserResponse = new Advertiser();
+		advertiserResponse.setStatus(advertiserRepository.putAdvertiserByName(name, contact, credit));
+		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+	}
+
+
 	//Credit limit
-//	@GetMapping(value = "/{advertiser}/credit", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//	return advertiser.stillHasCredit
+//	@GetMapping(value = "/{name}/credit", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//	return name.stillHasCredit
 
 
 }
