@@ -22,7 +22,7 @@ public class AdvertiserUtil {
 		advertisers.add(advertiser1);
 
 		Advertiser advertiser2 = new Advertiser();
-		advertiser2.setName("CircuitOfAmericas");
+		advertiser2.setName("COTA");
 		advertiser2.setContact("Brian Mishkin");
 		advertiser2.setCredit("500000");
 		advertisers.add(advertiser2);
