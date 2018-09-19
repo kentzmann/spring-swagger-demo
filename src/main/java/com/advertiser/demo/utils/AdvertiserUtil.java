@@ -13,6 +13,7 @@ public class AdvertiserUtil {
 
 	private AdvertiserUtil() {}
 
+	// Using data.sql in place of this method
 	public static List<Advertiser> buildAdvertiserDemoData() {
 		List<Advertiser> advertisers = new LinkedList<>();
 		Advertiser advertiser1 = new Advertiser();
@@ -36,7 +37,7 @@ public class AdvertiserUtil {
 		return advertisers;
 	}
 
-	public static boolean isAdvertiserNameValid() {
+	public static boolean isAdvertiserInputValid() {
 		return false;
 	}
 

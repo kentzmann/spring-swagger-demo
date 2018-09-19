@@ -45,7 +45,7 @@ public class AdvertiserController {
 	}
 
 	/**
-	 * Fin all Advertisers in database
+	 * Find all Advertisers in database
 	 * @return all Advertisers
 	 */
 	@RequestMapping(value = "/advertisers", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -65,9 +65,35 @@ public class AdvertiserController {
 								@PathVariable(name = "contact") String contact,
 								@PathVariable(name = "credit") String credit) {
 		Advertiser advertiserResponse = new Advertiser();
-		advertiserResponse.setStatus(advertiserRepository.putAdvertiserByName(name, contact, credit));
+		advertiserResponse.setStatus(advertiserRepository.createAdvertiserByName(name, contact, credit));
 		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
 	}
+
+	//WIP
+	@PutMapping(value = "/updateAdvertiser")
+	public ResponseEntity<Advertiser> updateAdvertiser(@RequestBody Advertiser advertiser) {
+		Advertiser advertiserResponse = new Advertiser();
+		advertiserResponse.setStatus(advertiserRepository.updateAdvertiserByName(advertiser));
+		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+	}
+
+	//Have to use raw JSON but still not working
+//	@PutMapping(value = "/{name}")
+//	public ResponseEntity<Advertiser> updateAdvertiser(@PathVariable(name = "name") String name,
+//													   @RequestBody Map<String, String> body) {
+//		Advertiser advertiserResponse = new Advertiser();
+//		advertiserResponse.setStatus(advertiserRepository.updateAdvertiserByName(name, body));
+//		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+//	}
+
+//	@PutMapping(value = "/{name}/{contact}/{credit}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+//	public ResponseEntity<Advertiser> updateAdvertiser(@PathVariable(name = "name") String name,
+//													   @PathVariable(name = "contact") String contact,
+//													   @PathVariable(name = "credit") String credit) {
+//		Advertiser advertiserResponse = new Advertiser();
+//		advertiserResponse.setStatus(advertiserRepository.updateAdvertiserByName(name, contact, credit));
+//		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+//	}
 
 
 	//Credit limit

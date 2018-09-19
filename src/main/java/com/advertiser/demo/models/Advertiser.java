@@ -42,7 +42,7 @@ public class Advertiser implements Serializable {
 
 	@Override
 	public String toString() {
-		return this.name + ", " + getContact() + ", " + getCredit();
+		return this.name + ", " + this.contact + ", " + this.credit;
 	}
 
 	public String getStatus() {
