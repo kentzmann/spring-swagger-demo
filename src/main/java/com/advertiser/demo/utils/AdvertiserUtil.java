@@ -36,9 +36,4 @@ public class AdvertiserUtil {
 
 		return advertisers;
 	}
-
-	public static boolean isAdvertiserInputValid() {
-		return false;
-	}
-
 }

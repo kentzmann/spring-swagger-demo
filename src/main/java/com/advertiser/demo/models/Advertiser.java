@@ -15,6 +15,7 @@ public class Advertiser implements Serializable {
 	private String contact;
 	private String credit;
 	private String status;
+	private String hasCredit;
 
 	public String getName() {
 		return name;
@@ -51,6 +52,14 @@ public class Advertiser implements Serializable {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+
+	public String getHasCredit() {
+		return hasCredit;
+	}
+
+	public void setHasCredit(String hasCredit) {
+		this.hasCredit = hasCredit;
 	}
 
 }

@@ -28,6 +28,12 @@ jdbc:h2:mem:testdb
 schema.sql, data.sql
 
 
+TEST WITH JUNIT:
+1. Run this command in workspace terminal
+./gradlew clean test --info
+
+DEV INFO
+
 TO CREATE A NEW REPO:
 1. In root folder, initialize repo with this command:
 git init

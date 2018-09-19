@@ -1,5 +1,6 @@
 package com.advertiser.demo.controllers;
 
+import com.advertiser.demo.Constants;
 import com.advertiser.demo.database.AdvertiserRepository;
 import com.advertiser.demo.models.Advertiser;
 import com.advertiser.demo.models.AdvertiserModel;
@@ -14,12 +15,12 @@ import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller for Advertiser to perform with:
- * 		GET, POST, PUT, DELETE name name
+ * 		GET, POST, PUT, DELETE name
  * Advertiser Resources:
  * 		Name, Contact, Credit
  * Validate if Advertiser has enough credit with:
- * 		GET name name & credit
- * Note: @EnableWebMvc causes Swagger to not load
+ * 		GET name & credit
+ * note: @EnableWebMvc causes Swagger to not load
  */
 @RestController
 @RequestMapping("/api/advertiser")
@@ -35,12 +36,30 @@ public class AdvertiserController {
 
 	/**
 	 * Find Advertiser in database
-	 * @param name Name
-	 * @return Advertiser object by Name
+	 * @param name of Advertiser
+	 * @return Advertiser object or status
 	 */
 	@GetMapping(value = "/{name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public final ResponseEntity<Advertiser> getAdvertiser(@PathVariable(name = "name") String name) {
-		Advertiser advertiserResponse = advertiserRepository.findByName(name);
+		Advertiser advertiserResponse = new Advertiser();
+		if (advertiserRepository.validateAdvertiserExists(name)) {
+			return new ResponseEntity<>(advertiserRepository.getAdvertiserByName(name), HttpStatus.OK);
+		} else {
+			advertiserResponse.setStatus(Constants.FAILED);
+			return new ResponseEntity<>(advertiserResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+
+	/**
+	 * Delete Advertiser in database
+	 * @param name of Advertiser
+	 * @return status
+	 */
+	@DeleteMapping(value = "{name}")
+	public final ResponseEntity<Advertiser> deleteAdvertiser(@PathVariable(name = "name") String name) {
+		Advertiser advertiserResponse = new Advertiser();
+		advertiserResponse.setStatus(advertiserRepository.deleteAdvertiserByName(name));
+
 		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
 	}
 
@@ -56,20 +75,22 @@ public class AdvertiserController {
 	}
 
 	/**
-	 * Add a new Advertiser in database
-	 * @param name Name
+	 * Create new Advertiser
+	 * @param advertiser JSON object
 	 * @return status
 	 */
-	@PostMapping(value = "/{name}/{contact}/{credit}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public ResponseEntity<Advertiser> newAdvertiser(@PathVariable(name = "name") String name,
-								@PathVariable(name = "contact") String contact,
-								@PathVariable(name = "credit") String credit) {
+	@PostMapping(value = "/newAdvertiser")
+	public ResponseEntity<Advertiser> newAdvertiser(@RequestBody Advertiser advertiser) {
 		Advertiser advertiserResponse = new Advertiser();
-		advertiserResponse.setStatus(advertiserRepository.createAdvertiserByName(name, contact, credit));
+		advertiserResponse.setStatus(advertiserRepository.createAdvertiserByName(advertiser));
 		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
 	}
 
-	//WIP
+	/**
+	 * Update existing Advertiser
+	 * @param advertiser JSON object
+	 * @return status
+	 */
 	@PutMapping(value = "/updateAdvertiser")
 	public ResponseEntity<Advertiser> updateAdvertiser(@RequestBody Advertiser advertiser) {
 		Advertiser advertiserResponse = new Advertiser();
@@ -77,28 +98,16 @@ public class AdvertiserController {
 		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
 	}
 
-	//Have to use raw JSON but still not working
-//	@PutMapping(value = "/{name}")
-//	public ResponseEntity<Advertiser> updateAdvertiser(@PathVariable(name = "name") String name,
-//													   @RequestBody Map<String, String> body) {
-//		Advertiser advertiserResponse = new Advertiser();
-//		advertiserResponse.setStatus(advertiserRepository.updateAdvertiserByName(name, body));
-//		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
-//	}
-
-//	@PutMapping(value = "/{name}/{contact}/{credit}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//	public ResponseEntity<Advertiser> updateAdvertiser(@PathVariable(name = "name") String name,
-//													   @PathVariable(name = "contact") String contact,
-//													   @PathVariable(name = "credit") String credit) {
-//		Advertiser advertiserResponse = new Advertiser();
-//		advertiserResponse.setStatus(advertiserRepository.updateAdvertiserByName(name, contact, credit));
-//		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
-//	}
-
-
-	//Credit limit
-//	@GetMapping(value = "/{name}/credit", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-//	return name.stillHasCredit
+	/**
+	 * Find if Advertiser has sufficient credit
+	 * @return status or credit
+	 */
+	@GetMapping(value = "/credit/{name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	public ResponseEntity<Advertiser> getAdvertiserHasCredit(@PathVariable(name = "name") String name) {
+		Advertiser advertiserResponse = new Advertiser();
+		advertiserResponse.setStatus(advertiserRepository.findIfAdvertiserHasCredit(name));
+		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+	}
 
 
 }
