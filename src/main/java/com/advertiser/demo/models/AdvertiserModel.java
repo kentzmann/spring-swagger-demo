@@ -15,6 +15,7 @@ public class AdvertiserModel implements Serializable {
 	private static final long serialVersionUID = 371023409122355394L;
 
 	private List<Advertiser> advertisers;
+	private String status;
 
 	public List<Advertiser> getAdvertisers() {
 		return advertisers;
@@ -22,5 +23,13 @@ public class AdvertiserModel implements Serializable {
 
 	public void setAdvertisers(List<Advertiser> advertisers) {
 		this.advertisers = advertisers;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }

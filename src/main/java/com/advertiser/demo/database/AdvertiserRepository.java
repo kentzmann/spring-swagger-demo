@@ -32,24 +32,8 @@ public class AdvertiserRepository {
 	 * @return Advertiser object in DB
 	 */
 	public Advertiser getAdvertiserByName(String name) {
-//		if (sqlObjectExists(name)) {
-			return jdbcTemplate.queryForObject(Constants.DB_SELECT_FROM_ADVERTISER_BY_NAME, new Object[]{name},
-					new BeanPropertyRowMapper<>(Advertiser.class));
-//		} else {
-//			Advertiser advertiser = new Advertiser();
-//			advertiser.setStatus(Constants.FAILED);
-//			LOGGER.info("GET ADVERTISER WAS NOT FOUND FOR NAME: " + name);
-//			return advertiser;
-//		}
-	}
-
-	//WIP
-	public boolean validateAdvertiserExists(String name) {
-		if (!sqlObjectExists(name)) {
-			LOGGER.info("GET ADVERTISER WAS NOT FOUND FOR NAME: " + name);
-			return false;
-		}
-		return true;
+		return jdbcTemplate.queryForObject(Constants.DB_SELECT_FROM_ADVERTISER_BY_NAME, new Object[]{name},
+				new BeanPropertyRowMapper<>(Advertiser.class));
 	}
 
 	/**
@@ -65,11 +49,7 @@ public class AdvertiserRepository {
 	 * @param name of Advertiser
 	 * @return status if Advertiser found or has credit
 	 */
-	public String findIfAdvertiserHasCredit(String name) {
-		if (name == null || !sqlObjectExists(name)) {
-			LOGGER.info("ADVERTISER NAME DOES NOT EXIST");
-			return Constants.FAILED;
-		}
+	public String getAdvertiserCreditStatus(String name) {
 		Advertiser advertiser = getAdvertiserByName(name);
 		if (advertiser.getCredit().isEmpty()
 				|| Double.parseDouble(advertiser.getCredit()) == 0) {
@@ -88,12 +68,6 @@ public class AdvertiserRepository {
 	 * @return status if record was created
 	 */
 	public String createAdvertiserByName(Advertiser advertiser) {
-		if (advertiser.getName() == null
-				|| sqlObjectExists(advertiser.getName())
-				|| advertiser.getContact() == null || advertiser.getCredit() == null) {
-			LOGGER.info("ADVERTISER ALREADY EXISTS OR CONTACT OR CREDIT MISSING");
-			return Constants.FAILED;
-		}
 		StringBuilder sb = new StringBuilder();
 		Formatter formatter = new Formatter(sb);
 		sb.append(Constants.DB_INSERT_INTO_ADVERTISER);
@@ -111,10 +85,6 @@ public class AdvertiserRepository {
 	 * @return status
 	 */
 	public String deleteAdvertiserByName(String name) {
-		if (name.isEmpty() || !sqlObjectExists(name)) {
-			LOGGER.info("DELETE ADVERTISER WAS NOT FOUND FOR NAME: " + name);
-			return Constants.FAILED;
-		}
 		LOGGER.info("DELETE ADVERTISER BY NAME: " + name);
 		jdbcTemplate.update(Constants.DB_DELETE_FROM_ADVERTISER_BY_NAME, name);
 		return Constants.SUCCESS;
@@ -125,11 +95,6 @@ public class AdvertiserRepository {
 	 * @return status if record was updated
 	 */
 	public String updateAdvertiserByName(Advertiser advertiser) {
-		if (advertiser.getName() == null
-				|| !sqlObjectExists(advertiser.getName())) {
-			LOGGER.info("ADVERTISER NAME NOT FOUND IN RESPONSE BODY");
-			return Constants.FAILED;
-		}
 		// note: could not get dynamic SQL String working with Object[], Map<String, String>, or String params
 		if (advertiser.getContact() != null && advertiser.getCredit() != null) {
 			LOGGER.info("ADVERTISER CONTACT AND CREDIT UPDATED");
@@ -148,10 +113,49 @@ public class AdvertiserRepository {
 	}
 
 	/**
+	 * @param name of Advertiser in DB
+	 * @return boolean
+	 */
+	public boolean validateAdvertiserExists(String name) {
+		if (!sqlObjectExists(name)) {
+			LOGGER.info("ADVERTISER NAME WAS NOT FOUND: " + name);
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * @param advertiser object
+	 * @return boolean
+	 */
+	public boolean isInputObjectValid(Advertiser advertiser) {
+		if (advertiser.getName() == null
+				|| sqlObjectExists(advertiser.getName())
+				|| advertiser.getContact() == null || advertiser.getCredit() == null) {
+			LOGGER.info("ADVERTISER ALREADY EXISTS OR CONTACT OR CREDIT MISSING");
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * @param advertiser object
+	 * @return boolean
+	 */
+	public boolean isUpdateObjectValid(Advertiser advertiser) {
+		if (advertiser.getName() == null
+				|| !sqlObjectExists(advertiser.getName())) {
+			LOGGER.info("ADVERTISER NAME NOT FOUND IN RESPONSE BODY");
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * @param name of Advertiser
 	 * @return true if found in DB
 	 */
-	public boolean sqlObjectExists(String name) {
+	private boolean sqlObjectExists(String name) {
 		StringBuilder sb = new StringBuilder();
 		Formatter formatter = new Formatter(sb);
 		sb.append(Constants.DB_CHECK_IF_PRIMARY_KEY_EXISTS);

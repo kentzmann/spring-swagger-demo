@@ -13,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * Controller for Advertiser to perform with:
  * 		GET, POST, PUT, DELETE name
@@ -58,20 +60,31 @@ public class AdvertiserController {
 	@DeleteMapping(value = "{name}")
 	public final ResponseEntity<Advertiser> deleteAdvertiser(@PathVariable(name = "name") String name) {
 		Advertiser advertiserResponse = new Advertiser();
-		advertiserResponse.setStatus(advertiserRepository.deleteAdvertiserByName(name));
+		if (advertiserRepository.validateAdvertiserExists(name)) {
+			advertiserResponse.setStatus(advertiserRepository.deleteAdvertiserByName(name));
+			return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+		} else {
+			advertiserResponse.setStatus(Constants.FAILED);
+			return new ResponseEntity<>(advertiserResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 
-		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
 	}
 
 	/**
 	 * Find all Advertisers in database
-	 * @return all Advertisers
+	 * @return Advertisers array or status
 	 */
 	@RequestMapping(value = "/advertisers", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-	public AdvertiserModel getAdvertisers() {
+	public ResponseEntity<AdvertiserModel> getAdvertisers() {
 		AdvertiserModel advertiserModel = new AdvertiserModel();
-		advertiserModel.setAdvertisers(advertiserRepository.findAllAdvertisers());
-		return advertiserModel;
+		List<Advertiser> advertisers = advertiserRepository.findAllAdvertisers();
+		if (!advertisers.isEmpty()) {
+			advertiserModel.setAdvertisers(advertisers);
+			return new ResponseEntity<>(advertiserModel, HttpStatus.OK);
+		} else {
+			advertiserModel.setStatus(Constants.FAILED);
+			return new ResponseEntity<>(advertiserModel, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	/**
@@ -82,8 +95,13 @@ public class AdvertiserController {
 	@PostMapping(value = "/newAdvertiser")
 	public ResponseEntity<Advertiser> newAdvertiser(@RequestBody Advertiser advertiser) {
 		Advertiser advertiserResponse = new Advertiser();
-		advertiserResponse.setStatus(advertiserRepository.createAdvertiserByName(advertiser));
-		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+		if (advertiserRepository.isInputObjectValid(advertiser)) {
+			advertiserResponse.setStatus(advertiserRepository.createAdvertiserByName(advertiser));
+			return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+		} else {
+			advertiserResponse.setStatus(Constants.FAILED);
+			return new ResponseEntity<>(advertiserResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	/**
@@ -94,8 +112,13 @@ public class AdvertiserController {
 	@PutMapping(value = "/updateAdvertiser")
 	public ResponseEntity<Advertiser> updateAdvertiser(@RequestBody Advertiser advertiser) {
 		Advertiser advertiserResponse = new Advertiser();
-		advertiserResponse.setStatus(advertiserRepository.updateAdvertiserByName(advertiser));
-		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+		if (advertiserRepository.isUpdateObjectValid(advertiser)) {
+			advertiserResponse.setStatus(advertiserRepository.updateAdvertiserByName(advertiser));
+			return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+		} else {
+			advertiserResponse.setStatus(Constants.FAILED);
+			return new ResponseEntity<>(advertiserResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
 
 	/**
@@ -105,9 +128,13 @@ public class AdvertiserController {
 	@GetMapping(value = "/credit/{name}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	public ResponseEntity<Advertiser> getAdvertiserHasCredit(@PathVariable(name = "name") String name) {
 		Advertiser advertiserResponse = new Advertiser();
-		advertiserResponse.setStatus(advertiserRepository.findIfAdvertiserHasCredit(name));
-		return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+		if (advertiserRepository.validateAdvertiserExists(name)) {
+			advertiserResponse.setStatus(advertiserRepository.getAdvertiserCreditStatus(name));
+			return new ResponseEntity<>(advertiserResponse, HttpStatus.OK);
+		} else {
+			advertiserResponse.setStatus(Constants.FAILED);
+			return new ResponseEntity<>(advertiserResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+		}
 	}
-
 
 }
