@@ -42,7 +42,7 @@ TO COMMIT VIA GIT:
 1. Clone repo with command:
 git clone git@github.com:KentTheCreator/spring-swagger-demo.git
 2. In root folder, set origin with command:
-git remote add origin git@github.com:KentTheCreator/spring-swagger-demo.git
+git remote add origin git@github.com:{username}/spring-swagger-demo.git
 3. Make changes if a contributor
 4. Email and Username have to be setup with commands:
 git config --global user.name "name"
